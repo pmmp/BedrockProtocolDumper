@@ -18,7 +18,6 @@ use pocketmine\utils\Binary;
 use pocketmine\utils\BinaryDataException;
 
 class PacketPool{
-	/** @var self|null */
 	protected static ?PacketPool $instance = null;
 
 	public static function getInstance() : self{
