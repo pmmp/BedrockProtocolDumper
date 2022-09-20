@@ -13,10 +13,17 @@ if len(sys.argv) < 3:
 def convert_windows_path(path):
     return path.replace('\\', '/').replace('C:', '/mnt/c')
 
-bds_path = convert_windows_path(sys.argv[1])
-bedrockprotocol_path = convert_windows_path(sys.argv[2])
-print 'Dumping data from ' + bds_path
-print 'BedrockProtocol path ' + bedrockprotocol_path
+def valid_paths(list_of_paths):
+    results = [os.path.exists(each) for each in list_of_paths]
+    return results == [True]*len(list_of_paths)
+
+
+bds_path = convert_windows_path(sys.argv[1]) if os.name == 'nt' else sys.argv[1]
+bedrockprotocol_path = convert_windows_path(sys.argv[2]) if os.name == 'nt' else sys.argv[2] 
+if not valid_paths([bds_path, bedrockprotocol_path]):
+    raise Exception(f"Invalid arguments provided:{sys.argv[1:3]} check that the paths are correct")
+print(f'Dumping data from: {bedrockprotocol_path}')
+print(f'BedrockProtocol path: {bds_path}')
 
 asm_regex = re.compile(r'.*\$(0x[A-Fa-f\d]+),%eax.*')
 symbol_match_regex = re.compile(r'([\da-zA-Z]+) (.{7}) (\.[A-Za-z\d_]+)\s+([\da-zA-Z]+)\s+(?:Base)?\s+(.+)')
@@ -40,26 +47,26 @@ def dump_packet_id(start, size, symbol):
         lines.append(line)
         if not line:
             break
-        parts = line.split('mov')
+        parts = line.split(b'mov')
         if len(parts) < 2:
             continue
-        matches = re.match(asm_regex, parts[1])
+        matches = re.match(asm_regex, parts[1].decode())
         if not matches:
             continue
         return int(matches.groups()[0], 16)
     for l in lines:
-        print l
+        print(l)
     raise Exception("Packet ID not found for symbol " + symbol)
 
 def dump_packet_id_threaded(start, size, symbol, packet_name, packets, packets_lock):
     id = dump_packet_id(start, size, symbol)
     packets_lock.acquire()
     packets[id] = packet_name
-    print 'Found ' + packet_name + ' ' + hex(id)
+    print('Found ' + packet_name + ' ' + hex(id))
     packets_lock.release()
 
 def parse_symbol(symbol):
-    parts = re.match(symbol_match_regex, symbol)
+    parts = re.match(symbol_match_regex, symbol.decode())
     if not parts:
         raise Exception("Regex match failed for \"" + symbol + "\"")
     if len(parts.groups()) < 5:
@@ -90,7 +97,7 @@ def dump_packet_ids():
         while thread_index is None:
             for i in range(len(threads)):
                 threads[i].join(0.1)
-                if not threads[i].isAlive():
+                if not threads[i].is_alive():
                     thread_index = i
                     threads[i] = None
                     break
@@ -108,7 +115,7 @@ def get_rodata_file_shift():
         line = proc.stdout.readline()
         if not line:
             break
-        matches = re.match(rodata_offset_regex, line.strip())
+        matches = re.match(rodata_offset_regex, line.strip().decode())
         if matches:
             lma = int('0x' + matches.groups()[0], 16)
             physical_address = int('0x' + matches.groups()[1], 16)
@@ -142,9 +149,10 @@ def dump_version():
         elif 'NetworkProtocolVersion' in symbol:
             protocol = get_value_at(bds_path, int('0x' + start, 16) + rodata_shift, int('0x' + size, 16), 'i')
 
-    print major, minor, patch, revision, beta, protocol
+    print(major, minor, patch, revision, beta, protocol)
     return Version(major, minor, patch, revision, beta, protocol)
 
-version = dump_version()
-packets = dump_packet_ids()
-generate_stuff(packets, version, bedrockprotocol_path)
+if __name__ == "__main__":
+    version = dump_version()
+    packets = dump_packet_ids()
+    generate_stuff(packets, version, bedrockprotocol_path)
