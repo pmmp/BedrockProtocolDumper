@@ -3,12 +3,12 @@ Generate basic information about new protocol versions from BDS using Python and
 
 ## Requirements
 - `sudo apt install binutils`
-- `python3`
+- `python2`
 - A local clone of [BedrockProtocol](https://github.com/pmmp/BedrockProtocol)
 - An x86_64 Linux binary of [Bedrock Dedicated Server](https://minecraft.net/download/server/bedrock)
 
 ## Usage
-`python3 protocol_info_generator_objdump.py <path to bedrock_server_symbols.debug> <path to BedrockProtocol src>`
+`python2 protocol_info_generator_objdump.py <path to bedrock_server_symbols.debug> <path to BedrockProtocol src>`
 
 ## How does it work?
 `protocol_info_generator_objdump` uses [GNU objdump](https://en.wikipedia.org/wiki/Objdump) to extract basic protocol information about a new version of Minecraft from [Bedrock Dedicated Server](https://minecraft.net/download/server/bedrock), including the following:
