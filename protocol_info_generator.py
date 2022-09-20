@@ -1,7 +1,6 @@
 from version import Version
 from math import ceil
-import re
-import os
+import re, os, json, time
 
 def split_upper(string):
     return filter(None, re.split("([A-Z][^A-Z]*)", string))
@@ -29,6 +28,7 @@ def generate_new_packet_stubs(out, resource_path, packets_dir):
 
 def check_removed_packets(out, packets_dir):
     names = out.values()
+    print(f"Collected {len(out.values())} packet definitions\n")
     #Check what old stuff got removed and make noise about it
     class_ignorelist = [
         'BatchPacket',
@@ -96,7 +96,7 @@ def generate_packet_handler(out, resource_path, packets_dir):
         functions.append(function_template % (base_name, i))
 
     with open(packets_dir + os.sep + 'PacketHandlerDefaultImplTrait.php', 'wb') as out_file:
-        out_file.write(packet_handler_template % ('\n\n'.join(functions)))
+        out_file.write(packet_handler_template % (bytes('\n\n'.join(functions), "utf8")))
 
     print('Recreated packet handler default trait')
     
@@ -115,11 +115,14 @@ def generate_packet_handler_interface(out, resource_path, packets_dir):
         functions.append(function_template % (base_name, i))
 
     with open(packets_dir + 'PacketHandlerInterface.php', 'wb') as out_file:
-        out_file.write(packet_handler_template % ('\n\n'.join(functions)))
+        out_file.write(packet_handler_template % (bytes('\n\n'.join(functions), "utf8")))
 
     print('Recreated packet handler interface')
 
 def generate_stuff(out, version, bedrockprotocol_dir):
+    timestamp = "-".join([str(ea) for ea in time.localtime()[3:6]])
+    with open(f"log-{timestamp}.json", "w") as fp:
+        fp.write(json.dumps({f"v{str(version).split(' ')[-1]}": out}))
     resource_path = os.path.dirname(os.path.realpath(__file__)) + os.sep
 
     if not os.path.exists(bedrockprotocol_dir):
