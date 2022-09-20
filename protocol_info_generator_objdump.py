@@ -15,8 +15,8 @@ def convert_windows_path(path):
 
 bds_path = convert_windows_path(sys.argv[1])
 bedrockprotocol_path = convert_windows_path(sys.argv[2])
-print 'Dumping data from ' + bds_path
-print 'BedrockProtocol path ' + bedrockprotocol_path
+print('Dumping data from ' + bds_path)
+print('BedrockProtocol path ' + bedrockprotocol_path)
 
 asm_regex = re.compile(r'.*\$(0x[A-Fa-f\d]+),%eax.*')
 symbol_match_regex = re.compile(r'([\da-zA-Z]+) (.{7}) (\.[A-Za-z\d_]+)\s+([\da-zA-Z]+)\s+(?:Base)?\s+(.+)')
@@ -48,14 +48,14 @@ def dump_packet_id(start, size, symbol):
             continue
         return int(matches.groups()[0], 16)
     for l in lines:
-        print l
+        print(l)
     raise Exception("Packet ID not found for symbol " + symbol)
 
 def dump_packet_id_threaded(start, size, symbol, packet_name, packets, packets_lock):
     id = dump_packet_id(start, size, symbol)
     packets_lock.acquire()
     packets[id] = packet_name
-    print 'Found ' + packet_name + ' ' + hex(id)
+    print('Found ' + packet_name + ' ' + hex(id))
     packets_lock.release()
 
 def parse_symbol(symbol):
@@ -142,7 +142,7 @@ def dump_version():
         elif 'NetworkProtocolVersion' in symbol:
             protocol = get_value_at(bds_path, int('0x' + start, 16) + rodata_shift, int('0x' + size, 16), 'i')
 
-    print major, minor, patch, revision, beta, protocol
+    print(major, minor, patch, revision, beta, protocol)
     return Version(major, minor, patch, revision, beta, protocol)
 
 version = dump_version()
