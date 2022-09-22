@@ -8,7 +8,7 @@ Generate basic information about new protocol versions from BDS using Python and
 - An x86_64 Linux binary of [Bedrock Dedicated Server](https://minecraft.net/download/server/bedrock)
 
 ## Usage
-`python2 protocol_info_generator_objdump.py <path to bedrock_server_symbols.debug> <path to BedrockProtocol src>`
+`python3 protocol_info_generator_objdump.py <path to bedrock_server_symbols.debug> <path to BedrockProtocol src>`
 
 ## How does it work?
 `protocol_info_generator_objdump` uses [GNU objdump](https://en.wikipedia.org/wiki/Objdump) to extract basic protocol information about a new version of Minecraft from [Bedrock Dedicated Server](https://minecraft.net/download/server/bedrock), including the following:
