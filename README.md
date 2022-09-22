@@ -3,7 +3,7 @@ Generate basic information about new protocol versions from BDS using Python and
 
 ## Requirements
 - `sudo apt install binutils`
-- `python2`
+- `python3.8+`
 - A local clone of [BedrockProtocol](https://github.com/pmmp/BedrockProtocol)
 - An x86_64 Linux binary of [Bedrock Dedicated Server](https://minecraft.net/download/server/bedrock)
 
