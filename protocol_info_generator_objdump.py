@@ -14,8 +14,7 @@ def convert_windows_path(path):
     return path.replace('\\', '/').replace('C:', '/mnt/c')
 
 def valid_paths(list_of_paths):
-    results = [os.path.exists(each) for each in list_of_paths]
-    return results == [True]*len(list_of_paths)
+    return all(os.path.exists(path) for path in list_of_paths)
 
 
 bds_path = convert_windows_path(sys.argv[1]) if os.name == 'nt' else sys.argv[1]
