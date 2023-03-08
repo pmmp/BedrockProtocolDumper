@@ -77,7 +77,7 @@ def generate_packet_pool(out, resource_path, packets_dir):
     for i in out.values():
         entries += ('\n\t\t$this->registerPacket(new %s());' % i)
 
-    pool_size = int(ceil(len(out) / 256.0) * 256)
+    pool_size = int(ceil(max(out) / 256.0) * 256)
     with open(packets_dir + 'PacketPool.php', 'w') as out_file:
         out_file.write(pool_template % (pool_size, entries))
 
