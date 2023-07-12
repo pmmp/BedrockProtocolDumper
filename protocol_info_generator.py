@@ -36,6 +36,9 @@ def check_removed_packets(out, packets_dir):
         'UnknownPacket',
         'PacketPool',
         'Packet',
+        'PacketDecodeException',
+        'PacketHandlerDefaultImplTrait',
+        'PacketHandlerInterface',
         'ClientboundPacket',
         'ServerboundPacket',
         'GarbageServerboundPacket'
