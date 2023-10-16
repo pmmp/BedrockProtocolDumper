@@ -129,17 +129,17 @@ def dump_version():
         if not symbol:
             break
         start, _, _, size, symbol = parse_symbol(symbol)
-        if 'MajorVersion' in symbol:
+        if symbol.endswith('MajorVersion'):
             major = get_value_at(bds_path, int('0x' + start, 16) + rodata_shift, int('0x' + size, 16), 'i')
-        elif 'MinorVersion' in symbol:
+        elif symbol.endswith('MinorVersion'):
             minor = get_value_at(bds_path, int('0x' + start, 16) + rodata_shift, int('0x' + size, 16), 'i')
-        elif 'PatchVersion' in symbol:
+        elif symbol.endswith('PatchVersion'):
             patch = get_value_at(bds_path, int('0x' + start, 16) + rodata_shift, int('0x' + size, 16), 'i')
-        elif 'RevisionVersion' in symbol:
+        elif symbol.endswith('RevisionVersion'):
             revision = get_value_at(bds_path, int('0x' + start, 16) + rodata_shift, int('0x' + size, 16), 'i')
-        elif 'IsBeta' in symbol:
+        elif symbol.endswith('IsBeta'):
             beta = get_value_at(bds_path, int('0x' + start, 16) + rodata_shift, int('0x' + size, 16), 'B') == 1
-        elif 'NetworkProtocolVersion' in symbol:
+        elif symbol.endswith('NetworkProtocolVersion'):
             protocol = get_value_at(bds_path, int('0x' + start, 16) + rodata_shift, int('0x' + size, 16), 'i')
 
     print major, minor, patch, revision, beta, protocol
