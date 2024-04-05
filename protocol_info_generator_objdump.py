@@ -19,7 +19,7 @@ print 'Dumping data from ' + bds_path
 print 'BedrockProtocol path ' + bedrockprotocol_path
 
 asm_regex = re.compile(r'.*\$(0x[A-Fa-f\d]+),%eax.*')
-symbol_match_regex = re.compile(r'([\da-zA-Z]+) (.{7}) (\.[A-Za-z\d_]+)\s+([\da-zA-Z]+)\s+(?:Base)?\s+(.+)')
+symbol_match_regex = re.compile(r'([\da-zA-Z]+) (.{7}) (\.[A-Za-z\d_]+)\s+([\da-zA-Z]+)\s+(?:Base|\.hidden)?\s+(.+)')
 rodata_offset_regex = re.compile(r"^\s*\d+\s+\.rodata\s+[\da-f]+\s+[\da-f]+\s+([\da-f]+)\s+([\da-f]+)")
 
 def get_value_at(file, offset, size, format):
