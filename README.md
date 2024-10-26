@@ -1,4 +1,13 @@
 # BedrockProtocolDumper
+
+## DEPRECATED
+This tool has been deprecated due to being inconvenient to use in a multi-developer workflow, and being too restricted.
+
+Please use the improved version of `protocol_info_dumper.py` in [bds-modding-devkit](https://github.com/pmmp/bds-modding-devkit) instead.
+The new version generates JSON output instead of PHP code, making it usable for any project.
+
+The new version is located in the devkit for convenience, since the other tools in that repo are typically needed for version updates too, and it makes more sense to have everything in one place.
+
 Generate basic information about new protocol versions from BDS using Python and GNU objdump
 
 ## Requirements
